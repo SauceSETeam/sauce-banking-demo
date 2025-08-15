@@ -1,10 +1,30 @@
 # 🎬 Sauce Banking Demo
 
-**Interactive demo for showcasing Sauce Labs testing capabilities with a modern banking application**
+**Foundation banking application for testing on Sauce Labs devices**
 
-This repository contains an interactive HTML-based banking demo with a presenter view for sales demonstrations and presentations.
+🌐 **Live Demo:** https://sauceseteam.github.io/sauce-banking-demo/
 
-## 🚀 Quick Start
+This repository contains a foundation banking demo with core features that can be expanded. It includes both the mobile app and a presenter view for demonstrations.
+
+## 🎯 Testing on Sauce Labs
+
+### How to Test This Demo:
+
+1. **Go to Sauce Labs Web Testing**
+   - Navigate to: https://app.saucelabs.com/live/web-testing
+   - Select your desired device (iPhone, Android, etc.)
+
+2. **Enter the Demo URL**
+   - URL: `https://sauceseteam.github.io/sauce-banking-demo/`
+   - Press Enter or click Go
+
+3. **Test the Application**
+   - Login: `demo_user` / `Test123!`
+   - Try the transfer feature
+   - Navigate through bottom menu
+   - Test on different devices and orientations
+
+## 🚀 Quick Start (Local Development)
 
 ### Option 1: Open directly in browser
 ```bash
@@ -33,33 +53,42 @@ open -a Simulator
 # Or drag and drop index.html into Safari
 ```
 
-## 📱 Demo Flow
+## 📱 Current Functionality (Foundation Version)
 
-### Step 1: Login (30 seconds)
-- Credentials are pre-filled: `demo_user` / `Test123!`
-- Click **Sign In**
-- Talk about JWT authentication, 2FA support, account lockout protection
+### Working Features:
 
-### Step 2: Dashboard (45 seconds)
-- Show account balances ($12,450 total)
-- Switch between Checking and Savings accounts
-- Point out real-time updates and transaction history
+1. **Login Screen**
+   - Username: `demo_user`
+   - Password: `Test123!`
+   - Click "Sign In" to access dashboard
 
-### Step 3: Money Transfer (45 seconds)
-- Click **Transfer** button
-- Amount is pre-filled ($500)
-- Click **Transfer Now**
-- Show success screen with receipt
+2. **Dashboard**
+   - View total balance ($12,450.32)
+   - Switch between Checking and Savings accounts (click account pills at top)
+   - View recent transactions list
 
-### Step 4: Stripe Payment (30 seconds)
-- Return to dashboard
-- Click **Pay** button
-- Discuss PCI-compliant payment processing
+3. **Money Transfer**
+   - Click "Transfer" quick action button
+   - Select From account (Checking/Savings)
+   - Select To account (Checking/Savings)
+   - Enter amount (e.g., 100)
+   - Click "Transfer Now"
+   - See success toast notification
 
-### Step 5: Advanced Features (30 seconds)
-- Click **More** button
-- Discuss wire transfers, bill pay, mobile deposit
-- Show security notifications
+4. **Bottom Navigation**
+   - Home: Returns to dashboard
+   - Accounts: Shows account details
+   - Cards: Card management view
+   - Payments: Payment options
+   - More: Additional options
+
+5. **Modal Popups**
+   - Payment, Deposit, and More options show modal dialogs
+   - Currently display placeholder content
+   - Foundation for future functionality
+
+### 🔴 Note on Limited Functionality:
+This is a foundation demo. Advanced features like bill pay, check deposit, and detailed payment processing are not yet fully implemented but can be added as needed.
 
 ## 🎯 Key Talking Points
 
@@ -75,15 +104,22 @@ open -a Simulator
 ### Mobile-First Design
 > "Responsive design automatically adapts from mobile to tablet to desktop - perfect for cross-device testing."
 
-## 🎨 Features Demonstrated
+## 🎨 What's Currently Implemented
 
-- ✅ **Authentication Flow** - Secure login with validation
-- ✅ **Account Management** - Multiple accounts with real-time balances
-- ✅ **Money Transfers** - Complex validation and business logic
-- ✅ **Payment Processing** - Stripe integration with 3D Secure
-- ✅ **Notifications** - Real-time alerts and confirmations
-- ✅ **Responsive Design** - Works on any device size
-- ✅ **Security Features** - Rate limiting, encryption, secure sessions
+### ✅ Working Features:
+- **Authentication** - Login screen with demo credentials
+- **Account Display** - Checking and Savings account balances
+- **Money Transfer** - Transfer between accounts with validation
+- **Transaction History** - List of recent transactions
+- **Toast Notifications** - Success/error feedback
+- **Responsive Design** - Optimized for mobile devices
+- **Navigation** - Bottom tab navigation system
+
+### 🔶 Foundation Elements (Ready for Expansion):
+- **Payment Modal** - Structure in place, needs implementation
+- **Deposit Modal** - Structure in place, needs implementation  
+- **Cards Section** - Navigation works, content needed
+- **More Options** - Menu structure ready for features
 
 ## 📹 Recording Tips
 
