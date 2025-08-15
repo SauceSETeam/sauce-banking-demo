@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sauce Banking Demo - Presenter View</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+
+        :root {
+            --primary: #E2231A;
+            --secondary: #2E2E2E;
+            --success: #4CAF50;
+            --background: #F5F5F5;
+            --card-bg: #FFFFFF;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            width: 100%;
+        }
+
+        /* Left Panel - Script */
+        .script-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow-y: auto;
+            max-height: calc(100vh - 40px);
+        }
+
+        .demo-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .demo-subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            background: var(--background);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .step:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .step.active {
+            background: linear-gradient(135deg, #E2231A15, #FF6B6B15);
+            border-left-color: var(--success);
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .step.active .step-number {
+            background: var(--success);
+        }
+
+        .step-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .step-action {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin: 10px 0;
+            display: inline-block;
+            font-weight: 500;
+        }
+
+        .talking-points {
+            margin-top: 15px;
+            padding-left: 45px;
+        }
+
+        .talking-points li {
+            margin-bottom: 8px;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            background: #FFF3CD;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        /* Right Panel - Controls */
+        .control-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .timer {
+            background: var(--secondary);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .timer-display {
+            font-size: 48px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+
+        .timer-label {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .control-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .control-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .control-btn.primary {
+            background: var(--primary);
+            color: white;
+            grid-column: span 2;
+        }
+
+        .control-btn.primary:hover {
+            background: #AC1710;
+            transform: translateY(-2px);
+        }
+
+        .control-btn.secondary {
+            background: var(--background);
+            color: var(--secondary);
+        }
+
+        .control-btn.secondary:hover {
+            background: #E0E0E0;
+        }
+
+        .key-points {
+            background: linear-gradient(135deg, #667eea15, #764ba215);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .key-points-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .key-point {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .key-point-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--success);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .tech-stack {
+            background: var(--secondary);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .tech-stack-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .tech-item {
+            background: rgba(255,255,255,0.1);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            background: var(--background);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), #8BC34A);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Panel - Demo Script -->
+        <div class="script-panel">
+            <h1 class="demo-title">🏦 Sauce Banking App Demo</h1>
+            <p class="demo-subtitle">Modern Enterprise Banking Application for Sauce Labs Testing</p>
+            
+            <!-- Step 1: Introduction -->
+            <div class="step" id="step1" onclick="setActiveStep(1)">
+                <div class="step-title">
+                    <span class="step-number">1</span>
+                    Introduction & Context Setting
+                </div>
+                <div class="step-action">⏱ 30 seconds</div>
+                <ul class="talking-points">
+                    <li>Welcome to <span class="highlight">Sauce Banking</span> - a modern, enterprise-ready banking application</li>
+                    <li>Built specifically to showcase <span class="highlight">complex testing scenarios</span> beyond simple e-commerce</li>
+                    <li>Demonstrates real-world features: <span class="highlight">authentication, transactions, payments, and security</span></li>
+                    <li>Perfect for testing with Sauce Labs' comprehensive testing platform</li>
+                </ul>
+            </div>
+
+            <!-- Step 2: Authentication -->
+            <div class="step" id="step2" onclick="setActiveStep(2)">
+                <div class="step-title">
+                    <span class="step-number">2</span>
+                    Secure Authentication Flow
+                </div>
+                <div class="step-action">👉 Click "Sign In" button</div>
+                <ul class="talking-points">
+                    <li>Enterprise-grade authentication with <span class="highlight">JWT tokens</span></li>
+                    <li>Features include: <span class="highlight">account lockout protection</span> after 5 failed attempts</li>
+                    <li>Support for <span class="highlight">2FA</span> and biometric authentication</li>
+                    <li>Rate limiting prevents brute force attacks</li>
+                    <li>Session management with secure token rotation</li>
+                </ul>
+            </div>
+
+            <!-- Step 3: Dashboard Overview -->
+            <div class="step" id="step3" onclick="setActiveStep(3)">
+                <div class="step-title">
+                    <span class="step-number">3</span>
+                    Dashboard & Account Management
+                </div>
+                <div class="step-action">👉 Show account switching</div>
+                <ul class="talking-points">
+                    <li>Real-time balance updates with <span class="highlight">WebSocket connections</span></li>
+                    <li>Multiple account types: <span class="highlight">Checking, Savings, Credit Cards</span></li>
+                    <li>Quick actions for common banking tasks</li>
+                    <li>Transaction history with advanced filtering</li>
+                    <li>Notice the <span class="highlight">responsive design</span> perfect for mobile testing</li>
+                </ul>
+            </div>
+
+            <!-- Step 4: Money Transfer -->
+            <div class="step" id="step4" onclick="setActiveStep(4)">
+                <div class="step-title">
+                    <span class="step-number">4</span>
+                    Internal Money Transfer
+                </div>
+                <div class="step-action">👉 Click "Transfer" → Enter amount → Transfer Now</div>
+                <ul class="talking-points">
+                    <li>Complex form validation with <span class="highlight">real-time feedback</span></li>
+                    <li>Business logic: <span class="highlight">insufficient funds checking</span></li>
+                    <li>Transaction limits and daily transfer restrictions</li>
+                    <li>Instant balance updates across accounts</li>
+                    <li>Success confirmation with <span class="highlight">transaction reference</span></li>
+                </ul>
+            </div>
+
+            <!-- Step 5: Stripe Payment -->
+            <div class="step" id="step5" onclick="setActiveStep(5)">
+                <div class="step-title">
+                    <span class="step-number">5</span>
+                    Stripe Payment Integration
+                </div>
+                <div class="step-action">👉 Click "Pay" button</div>
+                <ul class="talking-points">
+                    <li>Full <span class="highlight">Stripe API integration</span> for card payments</li>
+                    <li>PCI-compliant payment processing</li>
+                    <li>Support for <span class="highlight">3D Secure authentication</span></li>
+                    <li>Tokenized card storage for repeat payments</li>
+                    <li>Real payment flow that can be tested end-to-end</li>
+                </ul>
+            </div>
+
+            <!-- Step 6: Advanced Features -->
+            <div class="step" id="step6" onclick="setActiveStep(6)">
+                <div class="step-title">
+                    <span class="step-number">6</span>
+                    Enterprise Banking Features
+                </div>
+                <div class="step-action">👉 Click "More" options</div>
+                <ul class="talking-points">
+                    <li><span class="highlight">Wire transfers</span> with SWIFT/IBAN validation</li>
+                    <li><span class="highlight">Bill payment</span> scheduling and recurring payments</li>
+                    <li><span class="highlight">Mobile deposit</span> with image capture simulation</li>
+                    <li>Fraud detection with transaction monitoring</li>
+                    <li>Multi-currency support for international banking</li>
+                </ul>
+            </div>
+
+            <!-- Step 7: Security Features -->
+            <div class="step" id="step7" onclick="setActiveStep(7)">
+                <div class="step-title">
+                    <span class="step-number">7</span>
+                    Security & Compliance
+                </div>
+                <div class="step-action">🔒 Highlight security features</div>
+                <ul class="talking-points">
+                    <li><span class="highlight">OWASP Top 10</span> security implementations</li>
+                    <li>XSS and CSRF protection with tokens</li>
+                    <li>SQL injection prevention with parameterized queries</li>
+                    <li><span class="highlight">PCI DSS compliance</span> for payment processing</li>
+                    <li>Audit trails for all financial transactions</li>
+                    <li>GDPR-compliant data handling</li>
+                </ul>
+            </div>
+
+            <!-- Step 8: Testing with Sauce Labs -->
+            <div class="step" id="step8" onclick="setActiveStep(8)">
+                <div class="step-title">
+                    <span class="step-number">8</span>
+                    Sauce Labs Testing Capabilities
+                </div>
+                <div class="step-action">🧪 Testing scenarios</div>
+                <ul class="talking-points">
+                    <li><span class="highlight">Cross-browser testing</span> on 3000+ browser/OS combinations</li>
+                    <li><span class="highlight">Real device testing</span> for mobile banking scenarios</li>
+                    <li><span class="highlight">Visual testing</span> to catch UI regressions</li>
+                    <li><span class="highlight">Performance testing</span> for transaction processing</li>
+                    <li>API testing for backend services</li>
+                    <li>Security testing with penetration test simulations</li>
+                </ul>
+            </div>
+
+            <!-- Step 9: Conclusion -->
+            <div class="step" id="step9" onclick="setActiveStep(9)">
+                <div class="step-title">
+                    <span class="step-number">9</span>
+                    Summary & Next Steps
+                </div>
+                <div class="step-action">✅ Wrap up</div>
+                <ul class="talking-points">
+                    <li>Complete <span class="highlight">enterprise banking solution</span> ready for testing</li>
+                    <li>Demonstrates complexity beyond simple shopping carts</li>
+                    <li>Perfect for showcasing Sauce Labs' testing capabilities</li>
+                    <li>Available on GitHub for immediate deployment</li>
+                    <li>Ready for CI/CD integration with Jenkins, CircleCI, etc.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Right Panel - Controls & Info -->
+        <div class="control-panel">
+            <!-- Timer -->
+            <div class="timer">
+                <div class="timer-display" id="timer">00:00</div>
+                <div class="timer-label">Demo Duration</div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+
+            <!-- Control Buttons -->
+            <div class="control-buttons">
+                <button class="control-btn primary" onclick="startDemo()">▶️ Start Demo</button>
+                <button class="control-btn secondary" onclick="resetDemo()">↺ Reset</button>
+                <button class="control-btn secondary" onclick="pauseDemo()">⏸ Pause</button>
+            </div>
+
+            <!-- Key Points -->
+            <div class="key-points">
+                <h3 class="key-points-title">🎯 Key Differentiators</h3>
+                <div class="key-point">
+                    <div class="key-point-icon">✓</div>
+                    <div>Enterprise-grade security with JWT, 2FA, and encryption</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-icon">✓</div>
+                    <div>Real payment processing with Stripe integration</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-icon">✓</div>
+                    <div>Complex business logic for financial transactions</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-icon">✓</div>
+                    <div>WebSocket real-time updates</div>
+                </div>
+                <div class="key-point">
+                    <div class="key-point-icon">✓</div>
+                    <div>Mobile-responsive design for device testing</div>
+                </div>
+            </div>
+
+            <!-- Tech Stack -->
+            <div class="tech-stack">
+                <h3 class="tech-stack-title">💻 Technology Stack</h3>
+                <div class="tech-grid">
+                    <div class="tech-item">React 18</div>
+                    <div class="tech-item">Node.js</div>
+                    <div class="tech-item">MongoDB</div>
+                    <div class="tech-item">Express.js</div>
+                    <div class="tech-item">Stripe API</div>
+                    <div class="tech-item">JWT Auth</div>
+                    <div class="tech-item">Socket.io</div>
+                    <div class="tech-item">Docker</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        let timerInterval;
+        let seconds = 0;
+        let isPaused = false;
+
+        function setActiveStep(stepNum) {
+            // Remove active class from all steps
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+            });
+            
+            // Add active class to current step
+            document.getElementById(`step${stepNum}`).classList.add('active');
+            currentStep = stepNum;
+            
+            // Update progress bar
+            const progress = (stepNum / 9) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+            
+            // Send message to mobile app if in iframe
+            if (window.parent !== window) {
+                window.parent.postMessage({ action: 'step', step: stepNum }, '*');
+            }
+        }
+
+        function startDemo() {
+            if (!timerInterval) {
+                timerInterval = setInterval(updateTimer, 1000);
+            }
+            isPaused = false;
+            if (currentStep === 0) {
+                setActiveStep(1);
+            }
+        }
+
+        function pauseDemo() {
+            isPaused = true;
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        function resetDemo() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            seconds = 0;
+            currentStep = 0;
+            document.getElementById('timer').textContent = '00:00';
+            document.getElementById('progress').style.width = '0%';
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+            });
+        }
+
+        function updateTimer() {
+            if (!isPaused) {
+                seconds++;
+                const mins = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                document.getElementById('timer').textContent = 
+                    `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+        }
+
+        // Auto-advance steps (optional)
+        function autoAdvance() {
+            if (currentStep < 9 && !isPaused) {
+                setActiveStep(currentStep + 1);
+            }
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' && currentStep < 9) {
+                setActiveStep(currentStep + 1);
+            } else if (e.key === 'ArrowLeft' && currentStep > 1) {
+                setActiveStep(currentStep - 1);
+            } else if (e.key === ' ') {
+                e.preventDefault();
+                if (isPaused) {
+                    startDemo();
+                } else {
+                    pauseDemo();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Sauce Bank - Mobile Banking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        :root {
+            --primary-color: #E2231A;
+            --secondary-color: #2E2E2E;
+            --success-color: #4CAF50;
+            --warning-color: #FF9800;
+            --danger-color: #F44336;
+            --background: #F5F5F5;
+            --card-bg: #FFFFFF;
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --border-color: #E0E0E0;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* App Container */
+        .app-container {
+            max-width: 428px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: white;
+            position: relative;
+            box-shadow: 0 0 40px rgba(0,0,0,0.1);
+        }
+
+        /* Status Bar */
+        .status-bar {
+            background: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .status-bar .time {
+            font-weight: 600;
+        }
+
+        .status-bar .icons {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #E2231A 0%, #AC1710 100%);
+            color: white;
+            padding: 20px;
+            position: relative;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Screen */
+        .screen {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Login Screen */
+        .login-container {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .login-logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            background: var(--primary-color);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+            font-weight: bold;
+        }
+
+        .login-title {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .login-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(226, 35, 26, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background: #AC1710;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(226, 35, 26, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Dashboard */
+        .balance-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            margin: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .balance-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .balance-amount {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .account-pills {
+            display: flex;
+            gap: 10px;
+        }
+
+        .account-pill {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .account-pill.active {
+            background: white;
+            color: #667eea;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            padding: 0 20px;
+            margin-bottom: 30px;
+        }
+
+        .quick-actions-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .action-item {
+            background: white;
+            border-radius: 16px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .action-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .action-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 8px;
+            background: linear-gradient(135deg, var(--primary-color), #FF6B6B);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .action-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Transactions List */
+        .transactions-section {
+            padding: 0 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .see-all {
+            color: var(--primary-color);
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .transaction-list {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .transaction-item:hover {
+            background: #FAFAFA;
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        .transaction-icon.debit {
+            background: #FFEBEE;
+            color: var(--danger-color);
+        }
+
+        .transaction-icon.credit {
+            background: #E8F5E9;
+            color: var(--success-color);
+        }
+
+        .transaction-details {
+            flex: 1;
+        }
+
+        .transaction-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .transaction-date {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .transaction-amount {
+            font-weight: 600;
+        }
+
+        .transaction-amount.debit {
+            color: var(--danger-color);
+        }
+
+        .transaction-amount.credit {
+            color: var(--success-color);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 25px;
+            max-width: 428px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 5px;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            display: block;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 350px;
+            width: 90%;
+            animation: slideUp 0.3s;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+        }
+
+        .amount-input {
+            font-size: 32px;
+            text-align: center;
+            border: none;
+            outline: none;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        /* Transfer Screen */
+        .transfer-container {
+            padding: 20px;
+        }
+
+        .account-selector {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .selector-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .account-dropdown {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: var(--background);
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .account-info {
+            flex: 1;
+        }
+
+        .account-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .account-balance {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Success Screen */
+        .success-container {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 30px;
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        .success-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .success-message {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .receipt {
+            background: var(--background);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .receipt-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .receipt-value {
+            font-weight: 500;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Notification Toast */
+        .toast {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 2000;
+            transition: transform 0.3s ease-out;
+            max-width: 350px;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .toast-icon.success {
+            background: #E8F5E9;
+            color: var(--success-color);
+        }
+
+        .toast-icon.error {
+            background: #FFEBEE;
+            color: var(--danger-color);
+        }
+
+        .toast-message {
+            flex: 1;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span class="time" id="currentTime">9:41 AM</span>
+            <div class="icons">
+                <span>📶</span>
+                <span>📶</span>
+                <span>🔋</span>
+            </div>
+        </div>
+
+        <!-- Login Screen -->
+        <div id="loginScreen" class="screen active">
+            <div class="login-container">
+                <div class="login-logo">SB</div>
+                <h1 class="login-title">Welcome to Sauce Bank</h1>
+                <p class="login-subtitle">Your modern banking experience</p>
+                
+                <div class="input-group">
+                    <label>Username</label>
+                    <input type="text" id="username" placeholder="Enter your username" value="demo_user">
+                </div>
+                
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" value="Test123!">
+                </div>
+                
+                <button class="btn" onclick="login()">Sign In</button>
+                <button class="btn btn-secondary" style="margin-top: 10px;" onclick="showToast('Use demo_user / Test123!', 'success')">Use Demo Account</button>
+            </div>
+        </div>
+
+        <!-- Dashboard Screen -->
+        <div id="dashboardScreen" class="screen">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-top">
+                    <div class="logo">
+                        <span>🏦</span>
+                        <span>Sauce Bank</span>
+                    </div>
+                    <div class="user-avatar">JD</div>
+                </div>
+            </div>
+
+            <!-- Balance Card -->
+            <div class="balance-card">
+                <div class="balance-label">Total Balance</div>
+                <div class="balance-amount" id="totalBalance">$12,450.00</div>
+                <div class="account-pills">
+                    <div class="account-pill active" onclick="switchAccount('checking')">Checking ****4521</div>
+                    <div class="account-pill" onclick="switchAccount('savings')">Savings ****8932</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h3 class="quick-actions-title">Quick Actions</h3>
+                <div class="action-grid">
+                    <div class="action-item" onclick="showTransferModal()">
+                        <div class="action-icon">💸</div>
+                        <div class="action-label">Transfer</div>
+                    </div>
+                    <div class="action-item" onclick="showPaymentModal()">
+                        <div class="action-icon">💳</div>
+                        <div class="action-label">Pay</div>
+                    </div>
+                    <div class="action-item" onclick="showDepositModal()">
+                        <div class="action-icon">📥</div>
+                        <div class="action-label">Deposit</div>
+                    </div>
+                    <div class="action-item" onclick="showMoreOptions()">
+                        <div class="action-icon">📊</div>
+                        <div class="action-label">More</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Transactions -->
+            <div class="transactions-section">
+                <div class="section-header">
+                    <h3 class="section-title">Recent Transactions</h3>
+                    <span class="see-all" onclick="showAllTransactions()">See All</span>
+                </div>
+                <div class="transaction-list" id="transactionList">
+                    <!-- Transactions will be inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Transfer Screen -->
+        <div id="transferScreen" class="screen">
+            <div class="header">
+                <div class="header-top">
+                    <span onclick="showDashboard()" style="cursor: pointer;">← Back</span>
+                    <span style="font-weight: 600;">Transfer Money</span>
+                    <span></span>
+                </div>
+            </div>
+            
+            <div class="transfer-container">
+                <div class="account-selector">
+                    <div class="selector-label">From Account</div>
+                    <div class="account-dropdown">
+                        <div class="account-info">
+                            <div class="account-name">Checking Account</div>
+                            <div class="account-balance">Balance: $8,450.00</div>
+                        </div>
+                        <span>▼</span>
+                    </div>
+                </div>
+
+                <div class="account-selector">
+                    <div class="selector-label">To Account</div>
+                    <div class="account-dropdown">
+                        <div class="account-info">
+                            <div class="account-name">Savings Account</div>
+                            <div class="account-balance">Balance: $4,000.00</div>
+                        </div>
+                        <span>▼</span>
+                    </div>
+                </div>
+
+                <div class="account-selector">
+                    <div class="selector-label">Amount</div>
+                    <input type="number" class="amount-input" id="transferAmount" placeholder="$0.00" value="500">
+                </div>
+
+                <button class="btn" onclick="processTransfer()">Transfer Now</button>
+            </div>
+        </div>
+
+        <!-- Success Screen -->
+        <div id="successScreen" class="screen">
+            <div class="success-container">
+                <div class="success-icon">✓</div>
+                <h2 class="success-title">Transfer Successful!</h2>
+                <p class="success-message">Your money has been transferred successfully</p>
+                
+                <div class="receipt">
+                    <div class="receipt-row">
+                        <span class="receipt-label">Amount</span>
+                        <span class="receipt-value" id="receiptAmount">$500.00</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="receipt-label">From</span>
+                        <span class="receipt-value">Checking ****4521</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="receipt-label">To</span>
+                        <span class="receipt-value">Savings ****8932</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="receipt-label">Reference</span>
+                        <span class="receipt-value" id="receiptRef">TRF-2024-1234</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="receipt-label">Date</span>
+                        <span class="receipt-value" id="receiptDate">Dec 15, 2024</span>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="showDashboard()">Back to Dashboard</button>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav" id="bottomNav" style="display: none;">
+            <div class="nav-item active" onclick="showDashboard()">
+                <div class="nav-icon">🏠</div>
+                <span class="nav-label">Home</span>
+            </div>
+            <div class="nav-item" onclick="showAccounts()">
+                <div class="nav-icon">💰</div>
+                <span class="nav-label">Accounts</span>
+            </div>
+            <div class="nav-item" onclick="showCards()">
+                <div class="nav-icon">💳</div>
+                <span class="nav-label">Cards</span>
+            </div>
+            <div class="nav-item" onclick="showPayments()">
+                <div class="nav-icon">💸</div>
+                <span class="nav-label">Payments</span>
+            </div>
+            <div class="nav-item" onclick="showMore()">
+                <div class="nav-icon">☰</div>
+                <span class="nav-label">More</span>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="toast">
+            <div class="toast-icon success" id="toastIcon">✓</div>
+            <div class="toast-message" id="toastMessage">Success!</div>
+        </div>
+    </div>
+
+    <script>
+        // Sample transaction data
+        const transactions = [
+            { name: 'Stripe Payment', date: 'Today', amount: -299.99, type: 'debit', icon: '💳' },
+            { name: 'Salary Deposit', date: 'Dec 14', amount: 3500.00, type: 'credit', icon: '💰' },
+            { name: 'Pacific Gas & Electric', date: 'Dec 13', amount: -156.78, type: 'debit', icon: '⚡' },
+            { name: 'Transfer from John', date: 'Dec 12', amount: 250.00, type: 'credit', icon: '💸' },
+            { name: 'Amazon Purchase', date: 'Dec 11', amount: -127.99, type: 'debit', icon: '📦' },
+            { name: 'ATM Withdrawal', date: 'Dec 10', amount: -200.00, type: 'debit', icon: '🏧' }
+        ];
+
+        let currentBalance = 8450.00;
+        let savingsBalance = 4000.00;
+        let currentScreen = 'login';
+
+        // Initialize
+        function init() {
+            updateTime();
+            setInterval(updateTime, 1000);
+            loadTransactions();
+        }
+
+        // Update time in status bar
+        function updateTime() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const displayHours = hours % 12 || 12;
+            document.getElementById('currentTime').textContent = `${displayHours}:${minutes} ${ampm}`;
+        }
+
+        // Login function
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (!username || !password) {
+                showToast('Please enter username and password', 'error');
+                return;
+            }
+
+            // Simulate authentication
+            showToast('Authenticating...', 'success');
+            
+            setTimeout(() => {
+                document.getElementById('loginScreen').classList.remove('active');
+                document.getElementById('dashboardScreen').classList.add('active');
+                document.getElementById('bottomNav').style.display = 'flex';
+                currentScreen = 'dashboard';
+                showToast('Welcome back, John!', 'success');
+                
+                // Trigger auto-demo after login
+                setTimeout(startAutoDemo, 2000);
+            }, 1500);
+        }
+
+        // Load transactions
+        function loadTransactions() {
+            const list = document.getElementById('transactionList');
+            list.innerHTML = '';
+            
+            transactions.forEach(transaction => {
+                const item = document.createElement('div');
+                item.className = 'transaction-item';
+                item.innerHTML = `
+                    <div class="transaction-icon ${transaction.type}">${transaction.icon}</div>
+                    <div class="transaction-details">
+                        <div class="transaction-name">${transaction.name}</div>
+                        <div class="transaction-date">${transaction.date}</div>
+                    </div>
+                    <div class="transaction-amount ${transaction.type}">
+                        ${transaction.type === 'credit' ? '+' : ''}$${Math.abs(transaction.amount).toFixed(2)}
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        // Switch account view
+        function switchAccount(type) {
+            const pills = document.querySelectorAll('.account-pill');
+            pills.forEach(pill => pill.classList.remove('active'));
+            
+            if (type === 'checking') {
+                pills[0].classList.add('active');
+                document.getElementById('totalBalance').textContent = `$${currentBalance.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            } else {
+                pills[1].classList.add('active');
+                document.getElementById('totalBalance').textContent = `$${savingsBalance.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            }
+            
+            showToast(`Switched to ${type} account`, 'success');
+        }
+
+        // Show screens
+        function showDashboard() {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('dashboardScreen').classList.add('active');
+            currentScreen = 'dashboard';
+        }
+
+        function showTransferModal() {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('transferScreen').classList.add('active');
+            currentScreen = 'transfer';
+        }
+
+        function processTransfer() {
+            const amount = parseFloat(document.getElementById('transferAmount').value);
+            
+            if (!amount || amount <= 0) {
+                showToast('Please enter a valid amount', 'error');
+                return;
+            }
+
+            if (amount > currentBalance) {
+                showToast('Insufficient funds', 'error');
+                return;
+            }
+
+            showToast('Processing transfer...', 'success');
+            
+            setTimeout(() => {
+                // Update balances
+                currentBalance -= amount;
+                savingsBalance += amount;
+                
+                // Add new transaction
+                const newTransaction = {
+                    name: 'Transfer to Savings',
+                    date: 'Just now',
+                    amount: -amount,
+                    type: 'debit',
+                    icon: '💸'
+                };
+                transactions.unshift(newTransaction);
+                
+                // Show success screen
+                document.getElementById('receiptAmount').textContent = `$${amount.toFixed(2)}`;
+                document.getElementById('receiptRef').textContent = `TRF-${Date.now().toString().slice(-8)}`;
+                document.getElementById('receiptDate').textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById('successScreen').classList.add('active');
+                currentScreen = 'success';
+                
+                // Update dashboard
+                loadTransactions();
+                document.getElementById('totalBalance').textContent = `$${currentBalance.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            }, 2000);
+        }
+
+        function showPaymentModal() {
+            showToast('Opening Stripe payment...', 'success');
+            setTimeout(() => {
+                showToast('Payment of $299.99 processed successfully!', 'success');
+                
+                // Add payment transaction
+                currentBalance -= 299.99;
+                document.getElementById('totalBalance').textContent = `$${currentBalance.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+                loadTransactions();
+            }, 2000);
+        }
+
+        function showDepositModal() {
+            showToast('Mobile deposit feature coming soon!', 'success');
+        }
+
+        function showMoreOptions() {
+            showToast('More options: Wire Transfer, Bill Pay, Settings', 'success');
+        }
+
+        // Toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toastIcon');
+            const msg = document.getElementById('toastMessage');
+            
+            msg.textContent = message;
+            icon.className = `toast-icon ${type}`;
+            icon.textContent = type === 'success' ? '✓' : '⚠';
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Navigation functions
+        function showAccounts() {
+            showToast('Accounts: Checking, Savings, Credit Card', 'success');
+        }
+
+        function showCards() {
+            showToast('Cards: Debit ****4521, Credit ****8756', 'success');
+        }
+
+        function showPayments() {
+            showToast('Payments: Schedule bill payments', 'success');
+        }
+
+        function showMore() {
+            showToast('More: Profile, Settings, Help, Logout', 'success');
+        }
+
+        function showAllTransactions() {
+            showToast('Loading all transactions...', 'success');
+        }
+
+        // Auto-demo sequence
+        function startAutoDemo() {
+            // This function can be called to automatically demonstrate features
+            console.log('Auto-demo ready - features will be demonstrated as you interact');
+        }
+
+        // Initialize app
+        init();
+    </script>
+</body>
+</html>
