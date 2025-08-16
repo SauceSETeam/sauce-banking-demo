@@ -22,42 +22,111 @@ sauce-banking-demo/
 ## 🎨 APPLICATION FEATURES
 
 ### Main App (index.html)
-The banking app includes these screens and features:
+The banking app includes these comprehensive screens and features:
 
 1. **Login Screen**
-   - Username/Password authentication
-   - Biometric login simulation
+   - Username/Password authentication 
+   - Biometric login simulation (Face ID/Touch ID)
    - Demo credentials: demo/demo123
+   - Forgot password flow
+   - Remember me option
 
 2. **Dashboard**
-   - Account balance display
-   - Quick actions (Transfer, Pay, Deposit, More)
-   - Recent transactions list
-   - Card management
+   - Account balance display (Checking, Savings, Credit)
+   - Account switching pills with animations
+   - Quick actions grid (Transfer, Pay, Deposit, More)
+   - Recent transactions with merchant logos
+   - Credit card carousel
+   - Financial wellness widgets
+   - Dark mode toggle
 
 3. **Money Transfer**
-   - Contact selection
-   - Amount input with validation
-   - Real-time balance checking
-   - Transaction confirmation
+   - P2P transfers to contacts
+   - Zelle integration with email/phone
+   - Wire transfers for large amounts
+   - Between accounts transfers
+   - Amount validation and limits
+   - Transaction confirmation with ID
 
 4. **Bill Payment**
-   - Stripe integration mockup
+   - Schedule new payments modal
+   - Pay new/existing payees
+   - Recurring payment setup
+   - Payment history
+   - Due date reminders
    - Multiple payment methods
-   - Saved payees
-   - Scheduled payments
 
-5. **Notifications**
-   - Real-time push notifications
-   - Transaction alerts
-   - Security notifications
-   - Promotional messages
+5. **Mobile Check Deposit**
+   - Front/back check capture simulation
+   - Amount entry and verification
+   - Deposit history
+   - Hold policies display
+   - Confirmation with images
 
-6. **Profile/Settings**
-   - Account management
-   - Security settings
-   - Notification preferences
-   - App preferences
+6. **Credit Cards**
+   - View all cards with balances
+   - Rewards points tracking
+   - Card controls (freeze/unfreeze)
+   - Virtual card numbers
+   - Transaction disputes
+   - Credit limit management
+
+7. **Investment Portfolio**
+   - Holdings overview
+   - Performance charts
+   - Buy/sell simulation
+   - Market data
+   - Gains/losses tracking
+
+8. **Budgeting & Financial Wellness**
+   - Spending categories
+   - Monthly budget tracking
+   - Savings goals
+   - Financial wellness score
+   - Spending insights
+
+9. **QR Code Payments**
+   - Scan to pay simulation
+   - Generate QR for receiving
+   - Payment history
+   - Security verification
+
+10. **ATM/Branch Locator**
+    - Map view placeholder
+    - Nearby locations list
+    - Filter by services
+    - Get directions
+
+11. **Transaction History**
+    - Search functionality
+    - Filter by date/amount/category
+    - Export options
+    - Transaction details
+    - Categorization
+
+12. **Credit Score**
+    - Score display
+    - Score factors
+    - Improvement tips
+    - History tracking
+
+13. **Settings & Security**
+    - Profile information (locked for demo)
+    - Password management (protected)
+    - 2FA options
+    - Security questions
+    - Login history
+    - Privacy controls
+    - Notification preferences
+    - App preferences
+    - Data download
+
+14. **Notifications Center**
+    - Transaction alerts
+    - Security notifications  
+    - Account updates
+    - Promotional offers
+    - Mark as read/unread
 
 ### Presenter View (presenter.html)
 - Step-by-step demo script
