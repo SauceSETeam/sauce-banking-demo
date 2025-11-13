@@ -11,22 +11,22 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         }
 
         :root {
-            --primary-color: #E2231A;
+            --primary-color: #FF6B35;
             --secondary-color: #2E2E2E;
             --success-color: #4CAF50;
             --warning-color: #FF9800;
             --danger-color: #F44336;
             --info-color: #2196F3;
-            --background: #F5F5F5;
+            --background: #F8F8F8;
             --card-bg: #FFFFFF;
             --text-primary: #212121;
             --text-secondary: #757575;
             --border-color: #E0E0E0;
-            --shadow: rgba(0,0,0,0.1);
+            --shadow: rgba(0,0,0,0.12);
         }
 
         [data-theme="dark"] {
@@ -116,7 +116,7 @@
 
         /* Header */
         .header {
-            background: linear-gradient(135deg, #E2231A 0%, #AC1710 100%);
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
             color: white;
             padding: 20px;
             position: relative;
@@ -131,10 +131,12 @@
 
         .logo {
             font-size: 24px;
-            font-weight: bold;
+            font-weight: 700;
             display: flex;
             align-items: center;
             gap: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
         }
 
         .user-avatar {
@@ -223,15 +225,16 @@
 
         .widget {
             background: var(--card-bg);
-            border-radius: 16px;
+            border-radius: 24px;
             padding: 20px;
-            box-shadow: 0 2px 10px var(--shadow);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), 0 2px 5px rgba(0, 0, 0, 0.1);
             transition: all 0.3s;
+            border: 2px solid rgba(255, 107, 53, 0.15);
         }
 
         .widget:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 20px var(--shadow);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25), 0 4px 10px rgba(0, 0, 0, 0.15);
         }
 
         .widget-header {
@@ -242,9 +245,11 @@
         }
 
         .widget-title {
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 20px;
+            font-weight: 700;
             color: var(--text-primary);
+            line-height: 1.4;
+            letter-spacing: 0.5px;
         }
 
         .widget-action {
@@ -290,9 +295,10 @@
         }
 
         .credit-score-number {
-            font-size: 36px;
-            font-weight: bold;
+            font-size: 40px;
+            font-weight: 800;
             color: var(--text-primary);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
         }
 
         .credit-score-label {
@@ -331,41 +337,47 @@
         .quick-actions-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
+            gap: 20px;
             padding: 20px;
         }
 
         .quick-action {
             background: var(--card-bg);
-            border-radius: 16px;
+            border-radius: 20px;
             padding: 15px 10px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 2px 10px var(--shadow);
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            opacity: 0.95;
         }
 
         .quick-action:hover {
             transform: translateY(-5px);
-            box-shadow: 0 5px 20px var(--shadow);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+            opacity: 1;
         }
 
         .quick-action-icon {
             width: 45px;
             height: 45px;
-            margin: 0 auto 8px;
-            background: linear-gradient(135deg, var(--primary-color), #FF6B6B);
-            border-radius: 12px;
+            margin: 0 auto 10px;
+            background: linear-gradient(135deg, var(--primary-color), #FFB84D);
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-size: 22px;
+            box-shadow: 0 2px 8px rgba(255, 107, 53, 0.4);
         }
 
         .quick-action-label {
-            font-size: 11px;
+            font-size: 12px;
             color: var(--text-secondary);
+            font-weight: 500;
+            line-height: 1.3;
         }
 
         /* Cards Display */
@@ -380,13 +392,14 @@
         .card-item {
             min-width: 320px;
             height: 200px;
-            border-radius: 16px;
+            border-radius: 22px;
             padding: 20px;
             color: white;
             position: relative;
             scroll-snap-align: center;
             cursor: pointer;
             transition: transform 0.3s;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.3);
         }
 
         .card-item:hover {
@@ -411,8 +424,10 @@
 
         .card-number {
             font-size: 18px;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             margin-bottom: 20px;
+            font-weight: 500;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
         }
 
         .card-holder {
@@ -845,18 +860,20 @@
             background: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
+            border-radius: 16px;
+            font-size: 17px;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
             margin-top: 20px;
+            letter-spacing: 0.8px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         }
 
         .btn:hover {
-            background: #AC1710;
+            background: #E85A2C;
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(226, 35, 26, 0.3);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.35);
         }
 
         .btn-secondary {
@@ -942,8 +959,8 @@
         <div id="loginScreen" class="screen active">
             <div class="login-container">
                 <div class="login-logo">SB</div>
-                <h1 style="font-size: 28px; margin-bottom: 10px;">Welcome to Sauce Bank</h1>
-                <p style="color: var(--text-secondary); margin-bottom: 30px;">Your Complete Banking Solution</p>
+                <h1 style="font-size: 30px; margin-bottom: 10px; font-weight: 800; letter-spacing: 0.5px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);">Welcome to Sauce Bank QA</h1>
+                <p style="color: var(--text-secondary); margin-bottom: 30px; font-size: 15px; line-height: 1.5;">Your Complete Banking Solution - QA Environment</p>
                 
                 <div class="biometric-login">
                     <div class="biometric-btn" onclick="biometricLogin('face')">👤</div>
@@ -962,7 +979,7 @@
                     <input type="password" id="password" placeholder="Enter your password" value="Test123!">
                 </div>
                 
-                <button class="btn" onclick="login()">Sign In</button>
+                <button class="btn" onclick="login()">🔐 Login Now</button>
                 <button class="btn btn-secondary" onclick="showToast('Demo: demo_user / Test123!')">Use Demo Account</button>
             </div>
         </div>
